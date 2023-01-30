@@ -3,4 +3,4 @@ from django.contrib.auth.models import User as CoreUser
 
 
 class User(CoreUser):
-    profile_picture = models.ImageField(upload_to='images/user')
+    profile_picture = models.ImageField(upload_to='images/user', null=True)

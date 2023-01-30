@@ -1,0 +1,12 @@
+{% extends 'partials/base.html' %}
+
+
+{% block body %}
+    {% include 'partials/header.html' %}
+    <main id="main" class="main">
+        {% block main %}
+        {% endblock main %}
+    </main>
+    {% include 'partials/sidebar.html' %}
+    {% include 'partials/footer.html' %}
+{% endblock %}

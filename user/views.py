@@ -1,12 +1,19 @@
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.views.generic import CreateView
 
-from . forms import UserPasswordForm
+from .forms import UserPasswordForm, UserCreateForm
 
 
 class UserLogin(LoginView):
     template_name = 'user/login.html'
+
+
+class UserRegister(CreateView):
+    template_name = 'user/register.html'
+    form_class = UserCreateForm
+    success_url = reverse_lazy('user:login')
 
 
 class UserPasswordChange(PasswordChangeView):

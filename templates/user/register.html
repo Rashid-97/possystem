@@ -1,10 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'partials/base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block body %}
+    <main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <div class="d-flex justify-content-center py-4">
+                <a class="logo d-flex align-items-center w-auto">
+                  <img src="{% static 'assets/img/logo.png' %}" alt="">
+                  <span class="d-none d-lg-block">Kassa Əməliyyat Sistemi</span>
+                </a>
+              </div><!-- End Logo -->
+
+              <div class="card mb-3">
+
+                <div class="card-body">
+
+                  <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Hesab yarat</h5>
+                    <p class="text-center small">Məlumatlarınızı qeyd edin</p>
+                  </div>
+
+                  <form method="post" class="row g-3 needs-validation">
+                    {% csrf_token %}
+                    <div class="col-12">
+                      <label for="first_name" class="form-label">Ad</label>
+                      <input type="text" name="first_name" class="form-control" id="first_name" required>
+{#                      <div class="invalid-feedback">Please, enter your name!</div>#}
+                    </div>
+                    <div class="col-12">
+                      <label for="last_name" class="form-label">Soyad</label>
+                      <input type="text" name="last_name" class="form-control" id="last_name" required>
+{#                      <div class="invalid-feedback">Please, enter your name!</div>#}
+                    </div>
+
+{#                    <div class="col-12">#}
+{#                      <label for="yourEmail" class="form-label">Your Email</label>#}
+{#                      <input type="email" name="email" class="form-control" id="yourEmail" required>#}
+{#                      <div class="invalid-feedback">Please enter a valid Email adddress!</div>#}
+{#                    </div>#}
+
+                    <div class="col-12">
+                      <label for="username" class="form-label">İstifadəçi adı</label>
+                      <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="text" name="username" class="form-control" id="username" required>
+{#                        <div class="invalid-feedback">Please choose a username.</div>#}
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="password1" class="form-label">Şifrə</label>
+                      <input type="password" name="password1" class="form-control" id="password1" required>
+{#                      <div class="invalid-feedback">Please enter your password!</div>#}
+                    </div>
+                    <div class="col-12">
+                      <label for="password2" class="form-label">Şifrənin təsdiqi</label>
+                      <input type="password" name="password2" class="form-control" id="password2" required>
+{#                      <div class="invalid-feedback">Please enter your password!</div>#}
+                    </div>
+
+                    <div class="col-12">
+                      <button class="btn btn-primary w-100" type="submit">Hesab yarat</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Hesabınız artıq mövcuddur? <a href="{% url 'user:login' %}">Daxil ol</a></p>
+                    </div>
+                  </form>
+                    {% if form.errors %}
+                        {% for field in form %}
+
+                            {% for error in field.errors %}
+                                <span style="color: red;">
+                                    {{ field.label }}: {{ error|escape }}
+                                </span>
+                                <br>
+                            {% endfor %}
+
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+{% endblock %}
