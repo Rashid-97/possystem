@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
 
     # custom
+    'app.apps.AppConfig',
     'user.apps.UserConfig',
     'pos.apps.PosConfig',
 ]
@@ -69,6 +70,9 @@ MIDDLEWARE = [
 
     # third party
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    # custom
+    'app.middleware.AppMiddleware'
 ]
 
 ROOT_URLCONF = 'possystem.urls'
