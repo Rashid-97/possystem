@@ -4,7 +4,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="{% url 'pos:home' %}">
+        <a class="nav-link" href="{% url 'pos:home' %}">
           <i class="bi bi-grid"></i>
           <span>İdarə paneli</span>
         </a>
@@ -49,6 +49,15 @@
           </li>
         </ul>
       </li>
+
+      {% if user.is_manager %}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{% url 'pos:employees' %}">
+                    <i class="ri-user-3-line"></i>
+                    <span>İşçilər</span>
+                </a>
+            </li>
+      {% endif %}
 
 
     </ul>
