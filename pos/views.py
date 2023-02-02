@@ -1,4 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.db.models import Q
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
 
 from user.forms import UserCreateForm
@@ -19,8 +22,18 @@ class HomePage(LoginRequiredMixin, TemplateView):
 class Employee(LoginRequiredMixin, CreateView):
     template_name = 'pos/employee.html'
     form_class = UserCreateForm
+    context_object_name = 'employees'
+    success_url = reverse_lazy('pos:employees')
 
-    def get_queryset(self):
-        queryset = User.objects.filter(shop=self.request.session.get('curr_shop_id'))
-        print
-        return queryset
+    @transaction.atomic
+    def form_valid(self, form):
+        form.save()
+        form.instance.shop.add(self.request.session.get('curr_shop_id'))
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['employees'] = User.objects.filter(Q(shop=self.request.session.get('curr_shop_id')) & ~Q(id=self.request.user.id))
+
+        return context

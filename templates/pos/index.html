@@ -5,6 +5,16 @@
     {% include 'partials/header.html' %}
     <main id="main" class="main">
         {% block main %}
+            {% if messages %}
+                <ul class="messages">
+                  {% for message in messages %}
+                      <div class="alert alert-success alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                      </div>
+                  {% endfor %}
+                </ul>
+            {% endif %}
         {% endblock main %}
     </main>
     {% include 'partials/sidebar.html' %}

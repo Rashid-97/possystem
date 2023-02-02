@@ -23,4 +23,7 @@ class CreateShop(LoginRequiredMixin, CreateView):
         user.shop.add(shop)
         user.save()
 
+        self.request.session['shops'] = [shop.id]
+        self.request.session['curr_shop_id'] = shop.id
+
         return redirect('pos:home')

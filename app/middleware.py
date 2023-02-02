@@ -1,9 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import resolve
 
-from app import views
 from app.services import check_user_for_create_shop
-from user.models import User
 
 
 class AppMiddleware:

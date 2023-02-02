@@ -155,6 +155,8 @@ LOGIN_URL = reverse_lazy('user:login')
 LOGIN_REDIRECT_URL = reverse_lazy('pos:home')
 LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
 
+
+AUTH_USER_MODEL = 'user.User'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
