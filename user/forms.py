@@ -8,6 +8,10 @@ class UserPasswordForm(PasswordChangeForm):
 
 
 class UserCreateForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        del self.fields['password2']
+
     class Meta:
         model = User
         fields = [
@@ -15,5 +19,5 @@ class UserCreateForm(UserCreationForm):
             'last_name',
             'username',
             'password1',
-            'password2'
+            # 'password2'
         ]
