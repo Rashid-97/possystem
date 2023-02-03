@@ -2,7 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
+from django.views import View
+from django.views.generic import TemplateView, CreateView, FormView
 
 from user.forms import UserCreateForm
 from user.models import User
