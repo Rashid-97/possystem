@@ -28,39 +28,16 @@
                                     <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{ employee.first_name }}</td>
                                     <td>{{ employee.last_name }}</td>
-                                    <td>{{ employee.username }}</td>
+                                    <td class="emp_username">{{ employee.username }}</td>
                                     <td><img src="{{ employee.profile_picture.url }}" alt="Profil şəkili"
                                              class="rounded-circle w-25 h-25 p-3"></td>
                                     <td>
-                                        <button class="btn btn-outline-danger" id="delete_employee"
-                                                data-bs-toggle="modal" data-bs-target="#delete_employee_model">
+                                        <button class="btn btn-outline-danger" id="employee_delete_btn"
+                                                data-bs-toggle="modal" data-bs-target="#delete_employee_modal"
+                                                url="{% url 'pos:employee_delete' employee.id %}">
                                             <i class="bi bi-trash" style="color: red;"></i>
                                         </button>
-                                        <div class="modal fade" id="delete_employee_model" tabindex="-1">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Vertically Centered</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Non omnis incidunt qui sed occaecati magni asperiores est
-                                                        mollitia. Soluta at et reprehenderit. Placeat autem numquam et
-                                                        fuga numquam. Tempora in facere consequatur sit dolor ipsum.
-                                                        Consequatur nemo amet incidunt est facilis. Dolorem neque
-                                                        recusandae quo sit molestias sint dignissimos.
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close
-                                                        </button>
-                                                        <button type="button" class="btn btn-primary">Save changes
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div><!-- End Vertically centered Modal-->
+
                                     </td>
                                 </tr>
                             {% empty %}
@@ -70,6 +47,29 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        <div class="modal fade" id="delete_employee_modal" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="delete_modal_title">istifadəçi silinsin?</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+{#                                    <div class="modal-body">#}
+{#                                    </div>#}
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Imtina
+                                        </button>
+                                        <form action="" method="post" id="form_delete">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Sil
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

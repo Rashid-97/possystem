@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView, FormView
+from django.views.generic import TemplateView, CreateView, FormView, UpdateView, DeleteView
 
 from user.forms import UserCreateForm
 from user.models import User
@@ -35,6 +37,15 @@ class Employee(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['employees'] = User.objects.filter(Q(shop=self.request.session.get('curr_shop_id')) & ~Q(id=self.request.user.id))
+        context['employees'] = User.objects.filter(Q(shop=self.request.session.get('curr_shop_id'))
+                                                   & ~Q(id=self.request.user.id)
+                                                   & Q(is_active=True))
 
         return context
+
+
+class EmployeeDelete(LoginRequiredMixin, DeleteView):
+    def post(self, request, *args, **kwargs):
+        User.delete(user_id=kwargs['pk'])
+
+        return redirect('pos:employees')
