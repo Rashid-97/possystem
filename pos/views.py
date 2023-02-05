@@ -47,5 +47,5 @@ class Employee(LoginRequiredMixin, CreateView):
 class EmployeeDelete(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         User.delete(user_id=kwargs['pk'])
-
+        # Check if emp belongs to the admin
         return redirect('pos:employees')
