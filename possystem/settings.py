@@ -59,19 +59,19 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # django
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'login_required.middleware.LoginRequiredMiddleware',  # makes login required for
+    # all views except LOGIN_REQUIRED_IGNORE_VIEW_NAMES
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # third party
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
-    # custom
+    'pos.middleware.LoginRequiredMiddleware',
     'app.middleware.AppMiddleware'
 ]
 
@@ -154,7 +154,9 @@ MEDIA_URL = '/media/'
 LOGIN_URL = reverse_lazy('user:login')
 LOGIN_REDIRECT_URL = reverse_lazy('pos:home')
 LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
-
+LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [
+    'user:login'
+]
 
 AUTH_USER_MODEL = 'user.User'
 # Default primary key field type

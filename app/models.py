@@ -6,8 +6,6 @@ class DateTimeLog(models.Model):
     udate = models.DateTimeField(auto_now=True, verbose_name='Dəyişiklik tarixi')
     ddate = models.DateTimeField(auto_now=True, verbose_name='Silinmə tarixi')
 
-    is_deleted = models.BooleanField(default=False)
-
     class Meta:
         abstract = True
         ordering = ("-cdate",)

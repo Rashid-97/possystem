@@ -7,7 +7,9 @@ $("#generate_password").click(function (){
 
 $("#employee_delete_btn").click(function (e){
     let url = $(this).attr("url");
+    console.log(url)
     let emp_username = $(this).closest('tr').find(".emp_username").text()
+    console.log(emp_username)
     let title_text = $("#delete_modal_title").text();
     $("#delete_modal_title").text(emp_username+' '+title_text);
     $("#form_delete").attr("action", url);

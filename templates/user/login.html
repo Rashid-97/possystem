@@ -4,7 +4,6 @@
 {% block body %}
     <main>
         <div class="container">
-
           <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
             <div class="container">
               <div class="row justify-content-center">
@@ -56,7 +55,11 @@
                           <p class="small mb-0">Hesabınız yoxdur? <a href="{% url 'user:register' %}">Hesab yarat</a></p>
                         </div>
                       </form>
-                        {% if form.errors %}
+                        <span style="color: red;">
+                            {{ form.non_field_errors }}
+                            {{ error|escape }}
+                        </span>
+                        {% if form.errors or form.non_field_errors %}
                             {% for field in form %}
 
                                 {% for error in field.errors %}

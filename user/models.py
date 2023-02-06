@@ -21,6 +21,7 @@ class User(DateTimeLog, AbstractUser):
     profile_picture = models.ImageField(upload_to='images/user', null=True, default='images/user/profilepictures.png')
     is_manager = models.BooleanField(default=False)
     shop = models.ManyToManyField(Shop, verbose_name='Mağazalar')
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -28,7 +29,7 @@ class User(DateTimeLog, AbstractUser):
     @classmethod
     def delete(self, user_id):
         user = self.objects.get(pk=user_id)
-        user.is_active = False
+        user.is_deleted = True
         user.save()
 
         return user

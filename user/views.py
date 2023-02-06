@@ -1,5 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic import CreateView
@@ -12,13 +13,19 @@ class UserLogin(LoginView):
     template_name = 'user/login.html'
 
     def form_valid(self, form):
-        login(self.request, form.get_user())
+        if not form.get_user().is_deleted:
+            login(self.request, form.get_user())
 
-        self.request.session['shops'] = list(Shop.objects.filter(user=form.get_user()).values_list('id', flat=True))
-        if self.request.session['shops']:
-            self.request.session['curr_shop_id'] = self.request.session['shops'][0]
+            self.request.session['shops'] = list(Shop.objects.filter(user=form.get_user()).values_list('id', flat=True))
+            if self.request.session['shops']:
+                self.request.session['curr_shop_id'] = self.request.session['shops'][0]
 
-        return super().form_valid(form)
+            return super().form_valid(form)
+        else:
+            form.add_error(None, 'Hesabınız passiv edilmişdir.'
+                                 ' Hesabınızın aktivləşdirilməsi üçün mağaza sahibinə müraciət edin.')
+
+            return render(self.request, self.get_template_names(), {'form': form})
 
 
 class UserRegister(CreateView):
