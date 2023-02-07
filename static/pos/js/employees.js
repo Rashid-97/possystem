@@ -5,12 +5,16 @@ $("#generate_password").click(function (){
     return false;
 });
 
-$("#employee_delete_btn").click(function (e){
+$(document).on('click', "#employee_delete_btn", function (){
     let url = $(this).attr("url");
-    console.log(url)
     let emp_username = $(this).closest('tr').find(".emp_username").text()
-    console.log(emp_username)
-    let title_text = $("#delete_modal_title").text();
-    $("#delete_modal_title").text(emp_username+' '+title_text);
-    $("#form_delete").attr("action", url);
+    $("#modal_title_employee_delete").text(emp_username+' işçi bloklansın?');
+    $("#form_modal_employee_delete").attr("action", url);
+});
+
+$(document).on('click', "#employee_restore_btn", function (){
+    let url = $(this).attr("url");
+    let emp_username = $(this).closest('tr').find(".emp_username").text()
+    $("#modal_title_employee_restore").text(emp_username+' bərpa edilsin?');
+    $("#form_modal_employee_restore").attr("action", url);
 });

@@ -19,25 +19,40 @@
                                 <th scope="col">Soyad</th>
                                 <th scope="col">İstifadəçi adı</th>
                                 <th scope="col">Şəkil</th>
+                                <th scope="col">Status</th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for employee in employees %}
-                                <tr>
+                                <tr {% if employee.is_deleted %} class="table-secondary" {% endif %}>
                                     <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{ employee.first_name }}</td>
                                     <td>{{ employee.last_name }}</td>
                                     <td class="emp_username">{{ employee.username }}</td>
                                     <td><img src="{{ employee.profile_picture.url }}" alt="Profil şəkili"
-                                             class="rounded-circle w-25 h-25 p-3"></td>
+                                                class="rounded-circle" width="50" height="50"></td>
                                     <td>
-                                        <button class="btn btn-outline-danger" id="employee_delete_btn"
-                                                data-bs-toggle="modal" data-bs-target="#delete_employee_modal"
-                                                url="{% url 'pos:employee_delete' employee.id %}">
-                                            <i class="bi bi-trash" style="color: red;"></i>
+                                        {% if employee.is_deleted %}
+                                            <p class="text-muted">Bloklanan</p>
+                                        {% else %}
+                                            <p class="text-success">Aktiv</p>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if employee.is_deleted %}
+                                            <button class="btn btn-outline-danger" id="employee_restore_btn"
+                                                    data-bs-toggle="modal" data-bs-target="#modal_employee_restore"
+                                                    url="{% url 'pos:employee_restore' employee.id %}">
+                                                <i class="bi bi-unlock" style="color: red;"></i>
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-outline-primary" id="employee_delete_btn"
+                                                data-bs-toggle="modal" data-bs-target="#modal_employee_delete"
+                                                url="{% url 'pos:employee_block' employee.id %}">
+                                            <i class="bi bi-lock-fill" style="color: blue;"></i>
                                         </button>
-
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% empty %}
@@ -47,11 +62,11 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                        <div class="modal fade" id="delete_employee_modal" tabindex="-1">
+                        <div class="modal fade" id="modal_employee_delete" tabindex="-1">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="delete_modal_title">İşçi bloklansın?</h5>
+                                        <h5 class="modal-title" id="modal_title_employee_delete"></h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                     </div>
@@ -62,9 +77,33 @@
                                         <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Imtina
                                         </button>
-                                        <form action="" method="post" id="form_delete">
+                                        <form action="" method="post" id="form_modal_employee_delete">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-danger">Blokla
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modal_employee_restore" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modal_title_employee_restore"></h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Bərpa olunan işçilər əvvəlki qaydada öz hesablarına daxil ola bilirlər.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Imtina
+                                        </button>
+                                        <form action="" method="post" id="form_modal_employee_restore">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary">Bərpa et
                                             </button>
                                         </form>
                                     </div>
@@ -127,76 +166,6 @@
 
                             {% endfor %}
                         {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Bloklanmış işçilər</h5>
-                        <p>Use contextual classes <code>.table-primary .table-secondary .table-success .table-danger
-                            .table-warning .table-info .table-light .table-dark</code> to color tables, table rows or
-                            individual cells.</p>
-                        <!-- Table Variants -->
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Class</th>
-                                <th scope="col">Heading</th>
-                                <th scope="col">Heading</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <th scope="row">Default</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-
-                            <tr class="table-primary">
-                                <th scope="row">Primary</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-secondary">
-                                <th scope="row">Secondary</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-success">
-                                <th scope="row">Success</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-danger">
-                                <th scope="row">Danger</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-warning">
-                                <th scope="row">Warning</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-info">
-                                <th scope="row">Info</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-light">
-                                <th scope="row">Light</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            <tr class="table-dark">
-                                <th scope="row">Dark</th>
-                                <td>Cell</td>
-                                <td>Cell</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <!-- End Table Variants -->
-
                     </div>
                 </div>
             </div>

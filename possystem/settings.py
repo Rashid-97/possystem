@@ -155,7 +155,9 @@ LOGIN_URL = reverse_lazy('user:login')
 LOGIN_REDIRECT_URL = reverse_lazy('pos:home')
 LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
 LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [
-    'user:login'
+    'admin:index',
+    'admin:login',
+    'user:login',
 ]
 
 AUTH_USER_MODEL = 'user.User'

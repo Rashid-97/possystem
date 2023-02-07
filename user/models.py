@@ -25,11 +25,3 @@ class User(DateTimeLog, AbstractUser):
 
     def __str__(self):
         return self.username
-
-    @classmethod
-    def delete(self, user_id):
-        user = self.objects.get(pk=user_id)
-        user.is_deleted = True
-        user.save()
-
-        return user
