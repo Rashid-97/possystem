@@ -4,8 +4,10 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 
+from pos.forms import FirmForm
+from pos.models import Firm
 from pos.services import block_employee, restore_employee
 from user.forms import UserCreateForm
 from user.models import User
@@ -22,10 +24,9 @@ class HomePage(TemplateView):
         return context
 
 
-class Employee(CreateView):
+class EmployeeView(CreateView):
     template_name = 'pos/employee.html'
     form_class = UserCreateForm
-    context_object_name = 'employees'
     success_url = reverse_lazy('pos:employees')
 
     @transaction.atomic
@@ -43,7 +44,7 @@ class Employee(CreateView):
         return context
 
 
-class EmployeeBlock(View):
+class EmployeeBlockView(View):
     def post(self, request, *args, **kwargs):
         block_emp = block_employee(request, **kwargs)
         if block_emp['success']:
@@ -54,7 +55,7 @@ class EmployeeBlock(View):
         return redirect('pos:employees')
 
 
-class EmployeeRestore(View):
+class EmployeeRestoreView(View):
     def post(self, request, **kwargs):
         restore_emp = restore_employee(request, **kwargs)
         if restore_emp['success']:
@@ -63,3 +64,31 @@ class EmployeeRestore(View):
             messages.error(self.request, restore_emp['msg'], extra_tags='danger')
 
         return redirect('pos:employees')
+
+
+class FirmView(CreateView):
+    template_name = 'pos/firm.html'
+    form_class = FirmForm
+    success_url = reverse_lazy('pos:firm')
+
+    def form_valid(self, form):
+        form.instance.shop_id = self.request.session.get('curr_shop_id')
+        messages.success(self.request, 'Firma əlavə edildi.')
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['firms'] = Firm.objects.filter(shop_id=self.request.session.get('curr_shop_id'))
+
+        return context
+
+
+class FirmUpdateView(View):
+    def post(self, request, **kwargs):
+        firm_form = FirmForm(request.POST)
+        if firm_form.is_valid():
+            firm_form.save()
+            messages.success(request, 'Uğurla yeniləndi.')
+        else:
+            messages.error(request, 'Xəta.')

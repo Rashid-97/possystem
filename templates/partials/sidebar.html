@@ -51,7 +51,13 @@
       </li>
 
       {% if user.is_manager %}
-            <li class="nav-item">
+          <li class="nav-item">
+              <a class="nav-link collapsed" href="{% url 'pos:firm' %}">
+                  <i class="ri-user-3-line"></i>
+                  <span>Firmalar</span>
+              </a>
+          </li>
+          <li class="nav-item">
                 <a class="nav-link collapsed" href="{% url 'pos:employees' %}">
                     <i class="ri-user-3-line"></i>
                     <span>İşçilər</span>
