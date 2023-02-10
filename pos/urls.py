@@ -11,4 +11,5 @@ urlpatterns = [
     path('employee_restore/<int:pk>', views.EmployeeRestoreView.as_view(), name='employee_restore'),
     path('firm', views.FirmView.as_view(), name='firm'),
     path('firm/update/<int:pk>', views.FirmUpdateView.as_view(), name='firm_update'),
+    path('warehouse/products', views.ProductView.as_view(), name='warehouse_products')
 ]

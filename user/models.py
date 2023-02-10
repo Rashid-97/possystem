@@ -17,6 +17,12 @@ class UserLog(models.Model):
         abstract = True
 
 
+"""
+    Istifadeciler: bura daxildir magaza rehberleri
+    ve magaza iscileri
+"""
+
+
 class User(DateTimeLog, AbstractUser):
     profile_picture = models.ImageField(upload_to='images/user', null=True, default='images/user/profilepictures.png')
     is_manager = models.BooleanField(default=False)

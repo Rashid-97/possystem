@@ -158,6 +158,7 @@ LOGIN_REQUIRED_IGNORE_VIEW_NAMES = [
     'admin:index',
     'admin:login',
     'user:login',
+    'user:register',
 ]
 
 AUTH_USER_MODEL = 'user.User'

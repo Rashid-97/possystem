@@ -11,6 +11,12 @@ class DateTimeLog(models.Model):
         ordering = ("-cdate",)
 
 
+"""
+    Istifadecinin qeydiyyatdan kecerken
+    magaza yaratmalidir
+"""
+
+
 class Shop(DateTimeLog):
     name = models.CharField('Mağaza adı', max_length=50, blank=False)
     unvan = models.TextField('Ünvan', max_length=100)

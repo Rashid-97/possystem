@@ -6,8 +6,8 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView
 
-from pos.forms import FirmForm
-from pos.models import Firm
+from pos.forms import FirmForm, ProductForm
+from pos.models import Firm, Product
 from pos.services import block_employee, restore_employee
 from user.forms import UserCreateForm
 from user.models import User
@@ -92,3 +92,14 @@ class FirmUpdateView(View):
             messages.success(request, 'Uğurla yeniləndi.')
         else:
             messages.error(request, 'Xəta.')
+
+
+class ProductView(CreateView):
+    template_name = 'pos/warehouse_product.html'
+    form_class = ProductForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products'] = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
+
+        return context
