@@ -23,12 +23,12 @@ class Firm(models.Model):
 
 
 class Product(UserLog, DateTimeLog):
-    name = models.CharField('Məhsul adı', max_length=100)
-    barcode = models.CharField('Barkod', max_length=50, blank=True, null=True)
-    picture = models.ImageField('Şəkil', upload_to='images/product', null=True)
+    name = models.CharField(verbose_name='Məhsulun adı', max_length=100)
+    barcode = models.CharField(verbose_name='Barkod', max_length=50, blank=True, null=True)
+    picture = models.ImageField(verbose_name='Şəkil', upload_to='images/product', null=True)
     firm = models.ForeignKey(Firm, verbose_name='Firma', on_delete=models.CASCADE)
-    price = models.FloatField('Qiymət')
-    quantity = models.FloatField('Say')
+    price = models.FloatField(verbose_name='Qiymət')
+    quantity = models.FloatField(verbose_name='Say')
     measure = models.ForeignKey('UnitOfMeasure', verbose_name='Ölçü vahidi', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -41,8 +41,8 @@ class Product(UserLog, DateTimeLog):
 
 
 class UnitOfMeasure(models.Model):
-    measure = models.CharField('Ölçü vahidi', max_length=50)
-    abbr = models.CharField('Qısaldılmış adı', max_length=25)
+    measure = models.CharField(verbose_name='Ölçü vahidi', max_length=50)
+    abbr = models.CharField(verbose_name='Qısaldılmış adı', max_length=25)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

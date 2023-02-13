@@ -18,8 +18,8 @@ class DateTimeLog(models.Model):
 
 
 class Shop(DateTimeLog):
-    name = models.CharField('Mağaza adı', max_length=50, blank=False)
-    unvan = models.TextField('Ünvan', max_length=100)
+    name = models.CharField(verbose_name='Mağaza adı', max_length=50, blank=False)
+    unvan = models.TextField(verbose_name='Ünvan', max_length=100)
 
     def __str__(self):
         return self.name

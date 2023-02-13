@@ -9,9 +9,9 @@ from user.models import User
 
 
 class Sale(models.Model):
-    cashier = models.ForeignKey(User, verbose_name='Kassir', on_delete=models.CASCADE)
-    cost = models.FloatField(verbose_name='Qiymət')
-    cash_or_card = models.CharField(max_length=4, choices=[
+    employee = models.ForeignKey(User, verbose_name='İşçi', on_delete=models.CASCADE)
+    cost = models.FloatField('Qiymət')
+    cash_or_card = models.CharField('Ödəniş növü', max_length=4, choices=[
         ('cash', 'Nağd'),
         ('card', 'Kart')
     ])
@@ -40,14 +40,15 @@ class SaleProductRefund(models.Model):
 
 
 """
-    firmalardan alinan mehsullarin siyahisi
+    Firmalardan alinan mehsullarin siyahisi
 """
 
 
-class BuyFirm(models.Model):
-    firm = models.ForeignKey(Firm, verbose_name='Məhsul alınan firma', on_delete=models.CASCADE)
+class PurchaseProduct(models.Model):
+    product = models.ForeignKey(Product, verbose_name='Alınan məhsul', on_delete=models.CASCADE)
     employee = models.ForeignKey(User, verbose_name='İşçi', on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField('Alış tarixi', auto_now_add=True)
+    quantity = models.FloatField('Say')
 
 
 """
@@ -55,5 +56,9 @@ class BuyFirm(models.Model):
 """
 
 
-class BuyFirmRefundLog(models.Model):
-    pass
+class PurchaseProductRefundLog(models.Model):
+    product = models.ForeignKey(Product, verbose_name='Firmaya qaytarılan məhsul', on_delete=models.CASCADE)
+    quantity = models.FloatField('Say')
+    employee = models.ForeignKey(User, verbose_name='İşçi', on_delete=models.CASCADE)
+    date = models.DateTimeField('Geri qaytarma tarixi', auto_now_add=True)
+    note = models.TextField('Qeyd', blank=True, null=True)
