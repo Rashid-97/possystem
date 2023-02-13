@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'user.apps.UserConfig',
     'pos.apps.PosConfig',
+    'log.apps.LogConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,7 +1,7 @@
 from django.db import models
 
 from app.models import Shop, DateTimeLog
-from user.models import User, UserLog
+from user.models import UserLog
 
 """
     Mehsullarin alindigi firmalar
@@ -47,26 +47,3 @@ class UnitOfMeasure(models.Model):
 
     def __str__(self):
         return self.abbr + '(' + self.measure + ')'
-
-
-"""
-    Satilan, geri qaytarilan,
-    firmalardan alinan, firmalara qaytarilan
-    mehsullarin siyahisi
-"""
-
-
-class Log(DateTimeLog):
-    types = [
-        (1, 'Satılan'),
-        (2, 'Geri qaytarılan'),
-        (3, 'Firmadan alınan'),
-        (4, 'Firmaya qaytarılan'),
-    ]
-    product = models.ForeignKey(Product, verbose_name='Məhsul', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, verbose_name='Əməliyyat aparan işçi', on_delete=models.CASCADE)
-    type = models.CharField(choices=types, verbose_name='Tip', max_length=2)
-    note = models.TextField('Qeyd', blank=True, null=True)
-
-    def __str__(self):
-        return self.product.capitalize() + ',' + self.type
