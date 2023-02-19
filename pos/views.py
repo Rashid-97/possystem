@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView
 
 from pos.forms import FirmForm, ProductForm
 from pos.models import Firm, Product
@@ -94,12 +94,16 @@ class FirmUpdateView(View):
             messages.error(request, 'Xəta.')
 
 
-class ProductView(CreateView):
+class ProductView(ListView):
     template_name = 'pos/warehouse_product.html'
-    form_class = ProductForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['products'] = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
+    def get_queryset(self):
+        queryset = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
 
-        return context
+        return queryset
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['products'] = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
+    # 
+    #     return context

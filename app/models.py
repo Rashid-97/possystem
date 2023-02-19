@@ -23,3 +23,7 @@ class Shop(DateTimeLog):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Mağaza'
+        verbose_name_plural = 'Mağazalar'

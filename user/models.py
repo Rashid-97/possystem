@@ -26,8 +26,12 @@ class UserLog(models.Model):
 class User(DateTimeLog, AbstractUser):
     profile_picture = models.ImageField(verbose_name='Profil şəkil', upload_to='images/user', null=True, default='images/user/profilepictures.png')
     is_manager = models.BooleanField(default=False)
-    shop = models.ManyToManyField(Shop, verbose_name='Mağazalar')
+    shop = models.ManyToManyField(Shop, verbose_name=Shop._meta.verbose_name_plural)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
+
+    class Meta:
+        verbose_name = 'İşçi'
+        verbose_name_plural = 'İşçilər'

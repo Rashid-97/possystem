@@ -27,8 +27,8 @@ SECRET_KEY = 'django-insecure-40^yumm!3xozzr#)ahj2wbm6t!630#b_px4tf4qu9e1n@kpyrx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "192.168.1.108", "26c0-185-43-191-110.ngrok.io"]
-CSRF_TRUSTED_ORIGINS = ['https://26c0-185-43-191-110.ngrok.io']
+ALLOWED_HOSTS = ["127.0.0.1", "192.168.1.108"]
+# CSRF_TRUSTED_ORIGINS = ['']
 
 
 # django debug toolbar internal ips
