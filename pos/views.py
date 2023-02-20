@@ -96,14 +96,9 @@ class FirmUpdateView(View):
 
 class ProductView(ListView):
     template_name = 'pos/warehouse_product.html'
+    context_object_name = 'products'
 
     def get_queryset(self):
         queryset = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
 
         return queryset
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['products'] = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
-    # 
-    #     return context

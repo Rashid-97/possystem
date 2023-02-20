@@ -11,62 +11,44 @@
 
     <section class="section">
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"></h5>
-
-              <!-- Default Table -->
               <table class="table">
                 <thead>
-                {{ object_list }}
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Start Date</th>
+                    <th scope="col">Ad</th>
+                    <th scope="col">Barkod</th>
+                    <th scope="col">Firma və ya individual şəxs</th>
+                    <th scope="col">Qiymət</th>
+                    <th scope="col">Say</th>
+                    <th scope="col">Ölçü vahidi</th>
+                    <th scope="col">Şəkil</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>35</td>
-                    <td>2014-12-05</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Ashleigh Langosh</td>
-                    <td>Finance</td>
-                    <td>45</td>
-                    <td>2011-08-12</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Angus Grady</td>
-                    <td>HR</td>
-                    <td>34</td>
-                    <td>2012-06-11</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Raheem Lehner</td>
-                    <td>Dynamic Division Officer</td>
-                    <td>47</td>
-                    <td>2011-04-19</td>
-                  </tr>
+                {% for product in products %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.barcode }}</td>
+                        <td>{{ product.firm }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.measure }}</td>
+                        <td>
+                            {% if product.picture %}
+                                <img src="{{ product.picture.url }}" alt="Şəkil" class="bi-0-square" width="50" height="50">
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>Məlumat yoxdur</tr>
+                {% endfor %}
                 </tbody>
               </table>
-              <!-- End Default Table Example -->
             </div>
           </div>
         </div>
