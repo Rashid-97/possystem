@@ -1,0 +1,68 @@
+{% extends 'pos/index.html' %}
+
+
+{% block main %}
+    <div class="pagetitle">
+        <h1>Yeni məhsul</h1>
+    </div>
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <form method="post">
+                {% csrf_token %}
+                <div class="row mb-3">
+                  <label for="input{{ form.name.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.name.label }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input{{ form.name.name|capfirst }}" name="{{ form.name.name }}">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input{{ form.barcode.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.barcode.label }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input{{ form.barcode.name|capfirst }}" name="{{ form.barcode.name }}">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input{{ form.picture.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.picture.label }}</label>
+                  <div class="col-sm-10">
+                    <input type="file" accept="image/png, image/jpeg" class="form-control" id="input{{ form.picture.name|capfirst }}" name="{{ form.picture.name }}">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input{{ form.firm.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.firm.label }}</label>
+                  <div class="col-sm-10">
+                      {{ form.firm }}
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input{{ form.price.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.price.label }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="input{{ form.price.name|capfirst }}" name="{{ form.price.name }}">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input{{ form.quantity.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.quantity.label }}</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="input{{ form.quantity.name|capfirst }}" name="{{ form.quantity.name }}">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="input{{ form.measure.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.measure.label }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="input{{ form.measure.name|capfirst }}" name="{{ form.measure.name }}">
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Əlavə et</button>
+                  <button type="reset" class="btn btn-secondary">Təmizlə</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

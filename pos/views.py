@@ -7,6 +7,7 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView
 
 from pos.forms import FirmForm, ProductForm
+from pos.mixin import ManagerRequiredMixin
 from pos.models import Firm, Product
 from pos.services import block_employee, restore_employee
 from user.forms import UserCreateForm
@@ -24,7 +25,7 @@ class HomePage(TemplateView):
         return context
 
 
-class EmployeeView(CreateView):
+class EmployeeView(ManagerRequiredMixin, CreateView):
     template_name = 'pos/employee.html'
     form_class = UserCreateForm
     success_url = reverse_lazy('pos:employees')
@@ -44,7 +45,7 @@ class EmployeeView(CreateView):
         return context
 
 
-class EmployeeBlockView(View):
+class EmployeeBlockView(ManagerRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         block_emp = block_employee(request, **kwargs)
         if block_emp['success']:
@@ -55,7 +56,7 @@ class EmployeeBlockView(View):
         return redirect('pos:employees')
 
 
-class EmployeeRestoreView(View):
+class EmployeeRestoreView(ManagerRequiredMixin, View):
     def post(self, request, **kwargs):
         restore_emp = restore_employee(request, **kwargs)
         if restore_emp['success']:
@@ -84,7 +85,7 @@ class FirmView(CreateView):
         return context
 
 
-class FirmUpdateView(View):
+class FirmUpdateView(ManagerRequiredMixin, View):
     def post(self, request, **kwargs):
         firm_form = FirmForm(request.POST)
         if firm_form.is_valid():
@@ -102,3 +103,8 @@ class ProductView(ListView):
         queryset = Product.objects.filter(firm__shop_id=self.request.session['curr_shop_id'])
 
         return queryset
+
+
+class ProductViewCreate(CreateView):
+    template_name = 'pos/warehouse_product_create.html'
+    form_class = ProductForm
