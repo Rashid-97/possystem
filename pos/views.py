@@ -108,3 +108,9 @@ class ProductView(ListView):
 class ProductViewCreate(CreateView):
     template_name = 'pos/warehouse_product_create.html'
     form_class = ProductForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['curr_shop_id'] = self.request.session.get('curr_shop_id')
+
+        return kwargs

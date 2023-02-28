@@ -52,7 +52,8 @@
                 <div class="row mb-3">
                   <label for="input{{ form.measure.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.measure.label }}</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="input{{ form.measure.name|capfirst }}" name="{{ form.measure.name }}">
+{#                    <input type="text" class="form-control" id="input{{ form.measure.name|capfirst }}" name="{{ form.measure.name }}">#}
+                      {{ form.measure }}
                   </div>
                 </div>
                 <div class="text-center">
