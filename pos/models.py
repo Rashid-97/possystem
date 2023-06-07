@@ -1,6 +1,6 @@
 from django.db import models
 
-from app.models import Shop, DateTimeLog
+from app.models import DateTimeLog
 from user.models import UserLog
 
 """
@@ -12,7 +12,6 @@ class Firm(models.Model):
     name = models.CharField('Ad', max_length=100)
     phone_number = models.CharField('Əlaqə', max_length=30)
     email = models.EmailField('E-Poçta', max_length=50, blank=True, null=True)
-    shop = models.ForeignKey(Shop, verbose_name='Mağaza', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -29,11 +28,11 @@ class Firm(models.Model):
 
 class Product(UserLog, DateTimeLog):
     name = models.CharField(verbose_name='Məhsulun adı', max_length=100)
-    barcode = models.CharField(verbose_name='Barkod', max_length=50, blank=True, null=True)
+    barcode = models.CharField(verbose_name='Barkod', max_length=50, blank=True, null=True, unique=True)
     picture = models.ImageField(verbose_name='Şəkil', upload_to='images/product', blank=True, null=True)
     firm = models.ForeignKey(Firm, verbose_name=Firm._meta.verbose_name, on_delete=models.CASCADE)
-    price = models.FloatField(verbose_name='Qiymət')
-    quantity = models.FloatField(verbose_name='Say')
+    price = models.FloatField(verbose_name='Qiymət (AZN)')
+    quantity = models.FloatField(verbose_name='Say/Miqdar')
     measure = models.ForeignKey('UnitOfMeasure', verbose_name='Ölçü vahidi', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -42,6 +41,14 @@ class Product(UserLog, DateTimeLog):
     class Meta:
         verbose_name = 'Məhsul'
         verbose_name_plural = 'Məhsullar'
+
+    @classmethod
+    def get_all_related(cls):
+        queryset = cls.objects \
+            .select_related('firm') \
+            .select_related('measure')
+
+        return queryset
 
 
 """

@@ -22,9 +22,11 @@
                     <th scope="col">Ad</th>
                     <th scope="col">Barkod</th>
                     <th scope="col">Firma və ya individual şəxs</th>
-                    <th scope="col">Qiymət</th>
-                    <th scope="col">Say</th>
+                    <th scope="col">Qiymət (AZN)</th>
+                    <th scope="col">Say/Miqdar</th>
                     <th scope="col">Ölçü vahidi</th>
+                    <th scope="col">Əlavə edən işçi</th>
+                    <th scope="col">Tarix</th>
                     <th scope="col">Şəkil</th>
                   </tr>
                 </thead>
@@ -38,6 +40,8 @@
                         <td>{{ product.price }}</td>
                         <td>{{ product.quantity }}</td>
                         <td>{{ product.measure }}</td>
+                        <td>{{ product.user_create }}</td>
+                        <td>{{ product.cdate }}</td>
                         <td>
                             {% if product.picture %}
                                 <img src="{{ product.picture.url }}" alt="Şəkil" class="bi-0-square" width="50" height="50">
@@ -49,6 +53,35 @@
                 {% endfor %}
                 </tbody>
               </table>
+                {% if is_paginated %}
+                    <ul class="pagination justify-content-start">
+                        {% if page_obj.has_previous %}
+                            {% if page_obj.previous_page_number > 1 %}
+                                <li class="paginate_button page-item previous" id="candidates_previous">
+                                    <a href="?page=1" aria-controls="candidates" data-dt-idx="0" tabindex="0" class="page-link">İlk</a>
+                                </li>
+                            {% endif %}
+                            <li class="paginate_button page-item previous" id="candidates_previous">
+                                <a href="?page={{ page_obj.previous_page_number }}" aria-controls="candidates" data-dt-idx="0" tabindex="0" class="page-link">{{ page_obj.previous_page_number }}</a>
+                            </li>
+                        {% endif %}
+                        <span class="page-current">
+                            <li class="paginate_button page-item active">
+                                <a aria-controls="candidates" data-dt-idx="1" tabindex="0" class="page-link">{{ page_obj.number }}</a>
+                            </li>
+                        </span>
+                        {% if page_obj.has_next %}
+                            <li class="paginate_button page-item next" id="candidates_next">
+                                <a href="?page={{ page_obj.next_page_number }}" aria-controls="candidates" data-dt-idx="2" tabindex="0" class="page-link">{{ page_obj.next_page_number }}</a>
+                            </li>
+                            {% if page_obj.next_page_number < page_obj.paginator.num_pages %}
+                                <li class="paginate_button page-item next" id="candidates_next">
+                                    <a href="?page={{ page_obj.paginator.num_pages }}" aria-controls="candidates" data-dt-idx="2" tabindex="0" class="page-link">Son</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                {% endif %}
             </div>
           </div>
         </div>

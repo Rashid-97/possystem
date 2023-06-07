@@ -1,7 +1,9 @@
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.contrib.auth.models import User as CoreUser, AbstractUser
 
-from app.models import Shop, DateTimeLog
+from app.models import DateTimeLog
 from possystem import settings
 
 
@@ -18,7 +20,7 @@ class UserLog(models.Model):
 
 
 """
-    Istifadeciler: bura daxildir magaza rehberleri
+    Istifadeciler: bura daxildir magaza rehberi
     ve magaza iscileri
 """
 
@@ -26,7 +28,6 @@ class UserLog(models.Model):
 class User(DateTimeLog, AbstractUser):
     profile_picture = models.ImageField(verbose_name='Profil şəkil', upload_to='images/user', null=True, default='images/user/profilepictures.png')
     is_manager = models.BooleanField(default=False)
-    shop = models.ManyToManyField(Shop, verbose_name=Shop._meta.verbose_name_plural)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
@@ -35,3 +36,8 @@ class User(DateTimeLog, AbstractUser):
     class Meta:
         verbose_name = 'İşçi'
         verbose_name_plural = 'İşçilər'
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.password = make_password(self.password)
+        return super().save(*args, **kwargs)

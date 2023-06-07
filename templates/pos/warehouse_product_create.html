@@ -11,7 +11,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"></h5>
-              <form method="post">
+              <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row mb-3">
                   <label for="input{{ form.name.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.name.label }}</label>
@@ -28,7 +28,7 @@
                 <div class="row mb-3">
                   <label for="input{{ form.picture.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.picture.label }}</label>
                   <div class="col-sm-10">
-                    <input type="file" accept="image/png, image/jpeg" class="form-control" id="input{{ form.picture.name|capfirst }}" name="{{ form.picture.name }}">
+                    <input type="file" accept="image/*" class="form-control" id="input{{ form.picture.name|capfirst }}" name="{{ form.picture.name }}">
                   </div>
                 </div>
                 <div class="row mb-3">
@@ -40,7 +40,7 @@
                 <div class="row mb-3">
                   <label for="input{{ form.price.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.price.label }}</label>
                   <div class="col-sm-10">
-                    <input type="number" class="form-control" id="input{{ form.price.name|capfirst }}" name="{{ form.price.name }}">
+                    <input type="number" step="0.01" class="form-control" id="input{{ form.price.name|capfirst }}" name="{{ form.price.name }}">
                   </div>
                 </div>
                 <div class="row mb-3">

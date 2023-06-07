@@ -74,7 +74,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'pos.middleware.LoginRequiredMiddleware',
-    'app.middleware.AppMiddleware'
+    # 'app.middleware.AppMiddleware'
 ]
 
 ROOT_URLCONF = 'possystem.urls'
@@ -134,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'az'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Baku'
 
 USE_I18N = True
 

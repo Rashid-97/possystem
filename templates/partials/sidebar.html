@@ -6,7 +6,7 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'pos:home' %}">
           <i class="bi bi-grid"></i>
-          <span>İdarə paneli</span>
+          <span>Ana səhifə</span>
         </a>
       </li>
 
@@ -45,6 +45,34 @@
           <li>
             <a href="{% url 'pos:warehouse_products_create' %}">
               <i class="bi bi-circle"></i><span>Məhsul əlavə et</span>
+            </a>
+          </li>
+        </ul>
+        <ul id="anbar-nav" style="padding: 5px 5px 0 25px;" class="nav-item collapse" data-bs-parent="#sidebar-nav">
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#firma-nav" data-bs-toggle="collapse" href="#">
+                  <i class="bi bi-circle" style="font-size: 6px;"></i><span>Firma</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="firma-nav" class="nav-content collapse " data-bs-parent="#firma-nav">
+                  <li>
+                    <a href="">
+                      <i class="bi bi-circle"></i><span>Alış</span>
+                    </a>
+                  </li>
+                </ul>
+                <ul id="firma-nav" class="nav-content collapse " data-bs-parent="#firma-nav">
+                  <li>
+                    <a href="">
+                      <i class="bi bi-circle"></i><span>Geri qaytarma</span>
+                    </a>
+                  </li>
+                </ul>
+            </li>
+        </ul>
+        <ul id="anbar-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="{% url 'pos:warehouse_unitofmeasure_create' %}">
+              <i class="bi bi-circle"></i><span>Ölçü vahidi</span>
             </a>
           </li>
         </ul>

@@ -11,11 +11,10 @@ class FirmForm(ModelForm):
 
 class ProductForm(ModelForm):
     def __init__(self, *args, **kwargs):
-        self.curr_shop_id = kwargs.pop('curr_shop_id', None)
         super().__init__(*args, **kwargs)
         self.fields['firm'] = ModelChoiceField(
             label=Firm._meta.verbose_name,
-            queryset=Firm.objects.filter(shop_id=self.curr_shop_id),
+            queryset=Firm.objects.all(),
             widget=Select(attrs={'class': 'form-control'}))
 
         self.fields['measure'] = ModelChoiceField(
@@ -26,3 +25,9 @@ class ProductForm(ModelForm):
     class Meta:
         model = Product
         exclude = ['cdate', 'udate', 'ddate', 'user_create', 'user_update', 'user_delete']
+
+
+class UnitOfMeasureForm(ModelForm):
+    class Meta:
+        model = UnitOfMeasure
+        exclude = ['is_active']

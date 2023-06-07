@@ -3,14 +3,14 @@
 
 {% block main %}
     <div class="pagetitle">
-        <h1>Firmalar</h1>
+        <h1>Firmalar və ya individual şəxslər</h1>
     </div>
     <section class="section">
         <div class="row">
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body table-wrapper-scroll-y my-custom-scrollbar h-25">
-                        <h5 class="card-title">Firmaların siyahısı</h5>
+                        <h5 class="card-title">Firmaların (individual şəxs) siyahısı</h5>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -37,7 +37,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Yeni firma</h5>
+                        <h5 class="card-title">Yeni firma və ya individual şəxs</h5>
                         <form method="post">
                             {% csrf_token %}
                             <div class="row mb-3">
