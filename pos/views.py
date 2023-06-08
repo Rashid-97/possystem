@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView
 
 from pos.forms import FirmForm, ProductForm, UnitOfMeasureForm
 from pos.mixin import ManagerRequiredMixin
@@ -32,8 +32,13 @@ class CashPurchase():
     pass
 
 
-class FirmView(CreateView):
+class FirmView(ListView):
     template_name = 'pos/firm.html'
+    queryset = Firm.objects.all()
+
+
+class FirmCreateView(CreateView):
+    model = Firm
     form_class = FirmForm
     success_url = reverse_lazy('pos:firm')
 
@@ -45,21 +50,32 @@ class FirmView(CreateView):
         messages.error(self.request, form.errors, extra_tags='danger')
         return super().form_invalid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['firms'] = Firm.objects.all()
 
-        return context
+class FirmUpdateView(ManagerRequiredMixin, UpdateView):
+    model = Firm
+    form_class = FirmForm
+    success_url = reverse_lazy('pos:firm')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Uğurla yeniləndi')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors, extra_tags=['danger'])
+        return super().form_ivalid(form)
 
 
-class FirmUpdateView(ManagerRequiredMixin, View):
-    def post(self, request, **kwargs):
-        firm_form = FirmForm(request.POST)
-        if firm_form.is_valid():
-            firm_form.save()
-            messages.success(request, 'Uğurla yeniləndi.')
-        else:
-            messages.error(request, 'Xəta.', extra_tags='danger')
+class FirmDeleteView(ManagerRequiredMixin, DeleteView):
+    model = Firm
+    success_url = reverse_lazy('pos:firm')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Silindi')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors, extra_tags='danger')
+        return super().form_invalid(form)
 
 
 class ProductView(ListView):
@@ -88,11 +104,15 @@ class ProductViewCreate(CreateView):
         return super().form_invalid(form)
 
 
-class UnitOfMeasureView(CreateView):
+class UnitOfMeasureView(ListView):
     template_name = 'pos/warehouse_unitofmeasure.html'
+    queryset = UnitOfMeasure.objects.all()
+
+
+class UnitOfMeasureCreateView(CreateView):
+    model = UnitOfMeasure
     form_class = UnitOfMeasureForm
-    context_object_name = 'unitofmeasure'
-    success_url = reverse_lazy('pos:warehouse_unitofmeasure_create')
+    success_url = reverse_lazy('pos:warehouse_unitofmeasure')
 
     def form_valid(self, form):
         messages.success(self.request, 'Ölçü vahidi əlavə edildi.')
@@ -102,11 +122,36 @@ class UnitOfMeasureView(CreateView):
         messages.error(self.request, form.errors, extra_tags='danger')
         return super().form_invalid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['unitofmeasures'] = UnitOfMeasure.objects.all()
 
-        return context
+class UnitOfMeasureUpdateView(ManagerRequiredMixin, UpdateView):
+    model = UnitOfMeasure
+    form_class = UnitOfMeasureForm
+    success_url = reverse_lazy('pos:warehouse_unitofmeasure')
+
+    def get_object(self, queryset=None):
+        print(self.request.POST)
+        return self.model.objects.get(pk=self.request.POST.get('pk'))
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Uğurla yeniləndi')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors, extra_tags=['danger'])
+        return super().form_invalid(form)
+
+
+class UnitOfMeasureDeleteView(DeleteView):
+    model = UnitOfMeasure
+    success_url = reverse_lazy('pos:warehouse_unitofmeasure')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Silindi.')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors, extra_tags='danger')
+        return super().form_invalid(form)
 
 
 class EmployeeView(ManagerRequiredMixin, CreateView):

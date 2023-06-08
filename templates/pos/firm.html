@@ -21,16 +21,31 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for firm in firms %}
+                                {% for firm in object_list %}
                                     <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ firm.name }}</td>
-                                        <td>{{ firm.phone_number }}</td>
-                                        <td><button type="submit" class="btn btn-outline-primary"><i class="ri-edit-2-line"></i></button></td>
+                                        <form action="{% url 'pos:firm_update' firm.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><input type="text" class="form-control" style="border: 0;" name="name" value="{{ firm.name }}"></td>
+                                            <td><input type="text" class="form-control" style="border: 0;" name="contact" value="{{ firm.contact|default_if_none:"" }}"></td>
+                                            <td>
+                                                <button type="submit" class="btn btn-outline-primary" title="Dəyiş" id="edit_firm"><i class="ri-edit-2-line"></i></button>
+                                                <button
+                                                        type="button"
+                                                        class="btn btn-outline-danger"
+                                                        title="Sil"
+                                                        id="delete_firm"
+                                                        data-bs-toggle="modal" data-bs-target="#modal"
+                                                        url="{% url 'pos:firm_delete' firm.pk %}">
+                                                    <i class="ri-delete-bin-5-line"></i>
+                                                </button>
+                                            </td>
+                                        </form>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+                        {% include 'partials/modal.html' %}
                     </div>
                 </div>
             </div>
@@ -38,7 +53,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Yeni firma və ya individual şəxs</h5>
-                        <form method="post">
+                        <form action="{% url 'pos:firm_create' %}" method="post">
                             {% csrf_token %}
                             <div class="row mb-3">
                                 <label for="inputFirmName" class="col-sm-2 col-form-label">Ad</label>
@@ -48,9 +63,9 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputFirmPhoneNumber" class="col-sm-2 col-form-label">Əlaqə (tel. nömrəsi, e-poçta və s.)</label>
+                                <label for="inputFirmContact" class="col-sm-2 col-form-label">Əlaqə (tel. nömrəsi, e-poçta və s.)</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputFirmPhoneNumber" name="phone_number">
+                                    <input type="text" class="form-control" id="inputFirmContact" name="contact">
                                 </div>
                             </div>
                             <div class="text-center">
@@ -58,18 +73,6 @@
                                 <button type="reset" class="btn btn-secondary">Təmizlə</button>
                             </div>
                         </form>
-                        {% if form.errors %}
-                            {% for field in form %}
-
-                                {% for error in field.errors %}
-                                    <span style="color: red;">
-                                        {{ field.label }}: {{ error|escape }}
-                                    </span>
-                                    <br>
-                                {% endfor %}
-
-                            {% endfor %}
-                        {% endif %}
                     </div>
                 </div>
             </div>

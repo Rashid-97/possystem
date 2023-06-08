@@ -1,0 +1,23 @@
+<div class="modal fade" id="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Modal Text
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Imtina
+                </button>
+                <form action="" method="post" id="form_modal">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary" id="form_modal_submit">Təsdiqlə</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

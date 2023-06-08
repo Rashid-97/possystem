@@ -10,8 +10,7 @@ from user.models import UserLog
 
 class Firm(models.Model):
     name = models.CharField('Ad', max_length=100)
-    phone_number = models.CharField('Əlaqə', max_length=30)
-    email = models.EmailField('E-Poçta', max_length=50, blank=True, null=True)
+    contact = models.CharField('Əlaqə(tel. nömrəsi, e-poçta və s.)', max_length=30, null=True, blank=True)
 
     def __str__(self):
         return self.name

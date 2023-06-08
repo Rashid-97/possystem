@@ -6,7 +6,7 @@ from pos.models import Firm, Product, UnitOfMeasure
 class FirmForm(ModelForm):
     class Meta:
         model = Firm
-        fields = ['name', 'phone_number']
+        fields = ['name', 'contact']
 
 
 class ProductForm(ModelForm):

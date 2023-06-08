@@ -11,25 +11,45 @@
                 <div class="card">
                     <div class="card-body table-wrapper-scroll-y my-custom-scrollbar h-25">
                         <h5 class="card-title">Ölçülərin siyahısı</h5>
+{#                        <form action="{% url 'pos:warehouse_unitofmeasure_update' %}" method="post" class="unitofmeasure_edit_form">#}
+{#                        {% csrf_token %}#}
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Ölçü vahidi</th>
                                     <th scope="col">Qısaldılmış adı</th>
+                                    <th scope="col">Əməliyyat</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for unitofmeasure in unitofmeasures %}
+                                {% for unitofmeasure in object_list %}
                                     <tr>
-                                        <td>{{ forloop.counter }}</td>
-                                        <td>{{ unitofmeasure.measure }}</td>
-                                        <td>{{ unitofmeasure.abbr }}</td>
-                                        <td><button type="submit" class="btn btn-outline-primary"><i class="ri-edit-2-line"></i></button></td>
+                                        <form action="{% url 'pos:warehouse_unitofmeasure_update' unitofmeasure.pk %}" method="post" class="unitofmeasure_edit_form">
+                                            {% csrf_token %}
+                                        <input type="hidden" value="{{ unitofmeasure.pk }}" name="pk">
+                                            <td>{{ forloop.counter }}</td>
+                                            <td><input type="text" class="form-control" style="border: 0;" name="measure" value="{{ unitofmeasure.measure }}"></td>
+                                            <td><input type="text" class="form-control" style="border: 0;" name="abbr" value="{{ unitofmeasure.abbr }}"></td>
+                                            <td>
+                                                <button type="submit" title="Dəyiş" class="btn btn-outline-primary"><i class="ri-edit-2-line"></i></button>
+                                                <button
+                                                        type="button"
+                                                        title="Sil"
+                                                        class="btn btn-outline-danger"
+                                                        id="delete_unitofmeasure"
+                                                        data-bs-toggle="modal" data-bs-target="#modal"
+                                                        url="{% url 'pos:warehouse_unitofmeasure_delete' unitofmeasure.pk %}">
+                                                    <i class="ri-delete-bin-5-line"></i>
+                                                </button>
+                                            </td>
+                                        </form>
                                     </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+                        {% include 'partials/modal.html' %}
+{#                        </form>#}
                     </div>
                 </div>
             </div>
@@ -37,18 +57,18 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Yeni ölçü vahidi</h5>
-              <form method="post">
+              <form action="{% url 'pos:warehouse_unitofmeasure_create' %}" method="post">
                 {% csrf_token %}
                 <div class="row mb-3">
-                  <label for="input{{ form.measure.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.measure.label }}</label>
+                  <label for="inputMeasure" class="col-sm-2 col-form-label">Ölçü vahidi</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="input{{ form.measure.name|capfirst }}" name="{{ form.measure.name }}">
+                    <input type="text" class="form-control" id="inputMeasure" name="measure">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="input{{ form.abbr.name|capfirst }}" class="col-sm-2 col-form-label">{{ form.abbr.label }}</label>
+                  <label for="inputAbbr" class="col-sm-2 col-form-label">Qısaldılmış adı</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="input{{ form.abbr.name|capfirst }}" name="{{ form.abbr.name }}">
+                    <input type="text" class="form-control" id="inputAbbr" name="abbr">
                   </div>
                 </div>
                 <div class="text-center">
