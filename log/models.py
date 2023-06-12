@@ -47,8 +47,16 @@ class SaleProductRefund(models.Model):
 class PurchaseProduct(models.Model):
     product = models.ForeignKey(Product, verbose_name='Alınan məhsul', on_delete=models.CASCADE)
     employee = models.ForeignKey(User, verbose_name='Alan işçi', on_delete=models.CASCADE)
-    date = models.DateTimeField('Alış tarixi', auto_now_add=True)
+    date = models.DateTimeField('Əməliyyat tarixi', auto_now_add=True)
     quantity = models.FloatField('Say')
+
+    @classmethod
+    def get_all_related(cls):
+        queryset = cls.objects\
+            .select_related('product')\
+            .select_related('employee')
+
+        return queryset
 
 
 """
@@ -56,7 +64,7 @@ class PurchaseProduct(models.Model):
 """
 
 
-class PurchaseProductRefundLog(models.Model):
+class PurchaseProductRefund(models.Model):
     product = models.ForeignKey(Product, verbose_name='Firmaya qaytarılan məhsul', on_delete=models.CASCADE)
     quantity = models.FloatField('Say')
     employee = models.ForeignKey(User, verbose_name='Geri qaytaran işçi', on_delete=models.CASCADE)

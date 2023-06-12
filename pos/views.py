@@ -1,10 +1,14 @@
+from django.db import transaction
+
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, F
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView
 
+from log.forms import PurchaseProductForm
+from log.models import PurchaseProduct
 from pos.forms import FirmForm, ProductForm, UnitOfMeasureForm
 from pos.mixin import ManagerRequiredMixin
 from pos.models import Firm, Product, UnitOfMeasure
@@ -62,7 +66,7 @@ class FirmUpdateView(ManagerRequiredMixin, UpdateView):
 
     def form_invalid(self, form):
         messages.error(self.request, form.errors, extra_tags=['danger'])
-        return super().form_ivalid(form)
+        return super().form_invalid(form)
 
 
 class FirmDeleteView(ManagerRequiredMixin, DeleteView):
@@ -88,7 +92,7 @@ class ProductView(ListView):
         return queryset
 
 
-class ProductViewCreate(CreateView):
+class ProductCreateView(CreateView):
     template_name = 'pos/warehouse_product_create.html'
     form_class = ProductForm
     success_url = reverse_lazy('pos:warehouse_products_create')
@@ -98,6 +102,44 @@ class ProductViewCreate(CreateView):
         messages.success(self.request, 'Məhsul əlavə edildi.')
 
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors, extra_tags='danger')
+        return super().form_invalid(form)
+
+
+class PurchaseProductView(ListView):
+    template_name = 'pos/warehouse_firm_purchase_product.html'
+    queryset = PurchaseProduct.get_all_related()
+    # paginate = 20
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['products'] = Product.objects.values('id', 'name')
+
+        return context
+
+
+class PurchaseProductCreateView(CreateView):
+    model = PurchaseProduct
+    form_class = PurchaseProductForm
+    success_url = reverse_lazy('pos:warehouse_firm_purchase')
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                form.instance.employee = self.request.user
+                response = super().form_valid(form)
+
+                product = Product.objects.get(pk=self.request.POST.get('product'))
+                product.quantity = F('quantity') + self.request.POST.get('quantity')
+                product.save()
+
+                messages.success(self.request, 'Əməliyyat uğurla yerinə yetirildi')
+
+                return response
+        except:
+            return 'ERROR'
 
     def form_invalid(self, form):
         messages.error(self.request, form.errors, extra_tags='danger')
@@ -127,10 +169,6 @@ class UnitOfMeasureUpdateView(ManagerRequiredMixin, UpdateView):
     model = UnitOfMeasure
     form_class = UnitOfMeasureForm
     success_url = reverse_lazy('pos:warehouse_unitofmeasure')
-
-    def get_object(self, queryset=None):
-        print(self.request.POST)
-        return self.model.objects.get(pk=self.request.POST.get('pk'))
 
     def form_valid(self, form):
         messages.success(self.request, 'Uğurla yeniləndi')
