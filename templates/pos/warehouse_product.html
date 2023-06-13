@@ -15,19 +15,21 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"></h5>
-              <table class="table">
+              <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Ad</th>
                     <th scope="col">Barkod</th>
                     <th scope="col">Firma və ya individual şəxs</th>
-                    <th scope="col">Qiymət (AZN)</th>
+                    <th scope="col">Alış qiyməti (AZN)</th>
+                    <th scope="col">Satış qiyməti (AZN)</th>
                     <th scope="col">Say/Miqdar</th>
                     <th scope="col">Ölçü vahidi</th>
                     <th scope="col">Əlavə edən işçi</th>
                     <th scope="col">Tarix</th>
                     <th scope="col">Şəkil</th>
+                    <th scope="col">Əməliyyat</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -37,6 +39,7 @@
                         <td>{{ product.name }}</td>
                         <td>{{ product.barcode }}</td>
                         <td>{{ product.firm }}</td>
+                        <td>{{ product.purchase_price }}</td>
                         <td>{{ product.price }}</td>
                         <td>{{ product.quantity }}</td>
                         <td>{{ product.measure }}</td>
@@ -47,9 +50,20 @@
                                 <img src="{{ product.picture.url }}" alt="Şəkil" class="bi-0-square" width="50" height="50">
                             {% endif %}
                         </td>
+                        <td>
+                            <a href="{% url 'pos:warehouse_products_update' product.pk %}" class="btn btn-outline-primary" title="Dəyiş"><i class="ri-edit-2-line"></i></a>
+                            <button
+                                    class="btn btn-outline-danger"
+                                    title="Sil"
+                                    id="delete_product"
+                                    data-bs-toggle="modal" data-bs-target="#modal"
+                                    url="{% url 'pos:warehouse_products_delete' product.pk %}">
+                                <i class="ri-delete-bin-5-line"></i>
+                            </button>
+                        </td>
                     </tr>
                 {% empty %}
-                    <tr><td colspan="8" class="text-center">Məlumat yoxdur</td></tr>
+                    <tr><td colspan="12" class="text-center">Məlumat yoxdur</td></tr>
                 {% endfor %}
                 </tbody>
               </table>
@@ -82,6 +96,7 @@
                         {% endif %}
                     </ul>
                 {% endif %}
+                {% include 'partials/modal.html' %}
             </div>
           </div>
         </div>

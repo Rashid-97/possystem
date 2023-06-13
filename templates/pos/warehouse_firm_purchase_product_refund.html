@@ -1,0 +1,46 @@
+{% extends 'pos/index.html' %}
+
+
+{% block main %}
+    <div class="pagetitle">
+        <h1>Firmalara (və ya individual şəxs) geri qaytarılan məhsullar</h1>
+    </div>
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body table-wrapper-scroll-y my-custom-scrollbar h-25">
+                        <h5 class="card-title"></h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    {% for purchase_product_refund_field in purchase_product_refund_fields %}
+                                        <th scope="col">{{ purchase_product_refund_field.verbose_name }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for purchase_product in object_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ purchase_product.product }}</td>
+                                        <td>{{ purchase_product.product.firm }}</td>
+                                        <td>{{ purchase_product.employee }}</td>
+                                        <td>{{ purchase_product.date }}</td>
+                                        <td>{{ purchase_product.product.measure }}</td>
+                                        <td>{{ purchase_product.quantity }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="7" class="text-center">Məlumat yoxdur</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+      </div>
+    </section>
+{% endblock %}

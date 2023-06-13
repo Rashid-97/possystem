@@ -1,6 +1,7 @@
 from django.db import models
 
 from app.models import DateTimeLog
+from pos.managers import ProductManager
 from user.models import UserLog
 
 """
@@ -26,13 +27,17 @@ class Firm(models.Model):
 
 
 class Product(UserLog, DateTimeLog):
-    name = models.CharField(verbose_name='Məhsulun adı', max_length=100)
+    name = models.CharField(verbose_name='Məhsulun adı', max_length=100, unique=True)
     barcode = models.CharField(verbose_name='Barkod', max_length=50, blank=True, null=True, unique=True)
     picture = models.ImageField(verbose_name='Şəkil', upload_to='images/product', blank=True, null=True)
     firm = models.ForeignKey(Firm, verbose_name=Firm._meta.verbose_name, on_delete=models.CASCADE)
-    price = models.FloatField(verbose_name='Qiymət (AZN)')
+    price = models.FloatField(verbose_name='Satış qiyməti (AZN)')
+    purchase_price = models.FloatField(verbose_name='Alış qiyməti (AZN)')
     quantity = models.FloatField(verbose_name='Say/Miqdar')
     measure = models.ForeignKey('UnitOfMeasure', verbose_name='Ölçü vahidi', on_delete=models.CASCADE)
+    is_deleted = models.BooleanField(default=False)
+
+    objects = ProductManager()
 
     def __str__(self):
         return self.name
@@ -45,7 +50,7 @@ class Product(UserLog, DateTimeLog):
     def get_all_related(cls):
         queryset = cls.objects \
             .select_related('firm') \
-            .select_related('measure')
+            .select_related('measure')\
 
         return queryset
 

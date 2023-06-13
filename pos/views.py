@@ -1,18 +1,20 @@
+from django.contrib.messages import success
 from django.db import transaction
 
 from django.contrib import messages
 from django.db.models import Q, F
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView
 
 from log.forms import PurchaseProductForm
-from log.models import PurchaseProduct
+from log.models import PurchaseProduct, PurchaseProductRefund
 from pos.forms import FirmForm, ProductForm, UnitOfMeasureForm
 from pos.mixin import ManagerRequiredMixin
 from pos.models import Firm, Product, UnitOfMeasure
-from pos.services import block_employee, restore_employee
+from pos.services import block_employee, restore_employee, delete_product
 from user.forms import UserCreateForm
 from user.models import User
 
@@ -88,7 +90,7 @@ class ProductView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = Product.get_all_related()
+        queryset = Product.objects.none()
         return queryset
 
 
@@ -108,6 +110,34 @@ class ProductCreateView(CreateView):
         return super().form_invalid(form)
 
 
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'pos/warehouse_product_update.html'
+    form_class = ProductForm
+    success_url = reverse_lazy('pos:warehouse_products')
+
+    def form_valid(self, form):
+        form.instance.user_update = self.request.user
+        messages.success(self.request, 'Dəyişiklik edildi.')
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors, extra_tags='danger')
+        return super().form_invalid(form)
+
+
+class ProductDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        del_res = delete_product(pk, request.user)
+        if del_res['success']:
+            messages.success(self.request, 'Məhsul silindi.')
+        else:
+            messages.error(self.request, del_res['msg'], extra_tags=['danger'])
+        return HttpResponseRedirect(reverse('pos:warehouse_products'))
+
+
 class PurchaseProductView(ListView):
     template_name = 'pos/warehouse_firm_purchase_product.html'
     queryset = PurchaseProduct.get_all_related()
@@ -115,6 +145,7 @@ class PurchaseProductView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
+        context['purchase_product_fields'] = PurchaseProduct.get_table_fields()
         context['products'] = Product.objects.values('id', 'name')
 
         return context
@@ -144,6 +175,18 @@ class PurchaseProductCreateView(CreateView):
     def form_invalid(self, form):
         messages.error(self.request, form.errors, extra_tags='danger')
         return super().form_invalid(form)
+
+
+class PurchaseProductRefundView(ListView):
+    template_name = 'pos/warehouse_firm_purchase_product_refund.html'
+    queryset = PurchaseProductRefund.get_all_related()
+    # paginate = 20
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['purchase_product_refund_fields'] = PurchaseProductRefund.get_table_fields()
+
+        return context
 
 
 class UnitOfMeasureView(ListView):

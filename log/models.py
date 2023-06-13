@@ -49,14 +49,23 @@ class PurchaseProduct(models.Model):
     employee = models.ForeignKey(User, verbose_name='Alan işçi', on_delete=models.CASCADE)
     date = models.DateTimeField('Əməliyyat tarixi', auto_now_add=True)
     quantity = models.FloatField('Say')
+    refunded = models.BooleanField(default=False)
 
     @classmethod
     def get_all_related(cls):
         queryset = cls.objects\
-            .select_related('product')\
+            .select_related('product__measure') \
+            .select_related('product__firm') \
             .select_related('employee')
 
         return queryset
+
+    @classmethod
+    def get_table_fields(cls):
+        arr = ['id', 'refunded']
+        fields = [field for field in cls._meta.fields if field.name not in arr]
+
+        return fields
 
 
 """
@@ -70,3 +79,19 @@ class PurchaseProductRefund(models.Model):
     employee = models.ForeignKey(User, verbose_name='Geri qaytaran işçi', on_delete=models.CASCADE)
     date = models.DateTimeField('Geri qaytarılma tarixi', auto_now_add=True)
     note = models.TextField('Qeyd', blank=True, null=True)
+
+    @classmethod
+    def get_all_related(cls):
+        queryset = cls.objects \
+            .select_related('product__measure') \
+            .select_related('product__firm') \
+            .select_related('employee')
+
+        return queryset
+
+    @classmethod
+    def get_table_fields(cls):
+        arr = ['id']
+        fields = [field for field in cls._meta.fields if field.name not in arr]
+
+        return fields

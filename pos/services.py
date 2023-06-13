@@ -1,3 +1,4 @@
+from pos.models import Product
 from user.models import User
 
 """
@@ -36,5 +37,25 @@ def restore_employee(request, **kwargs):
         res['msg'] = "İşçi {user} bərpa edildi.".format(user=user)
     except:
         res['msg'] = "İşçi tapılmadı."
+
+    return res
+
+
+"""
+    Product delete (is_deleted column setting True)
+"""
+
+
+def delete_product(pk, user):
+    res = dict()
+    res['success'] = False
+    try:
+        product = Product.objects.get(pk=pk)
+        product.user_delete = user
+        product.is_deleted = True
+        product.save()
+        res['success'] = True
+    except:
+        res['msg'] = 'Xəta'
 
     return res

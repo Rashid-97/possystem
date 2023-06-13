@@ -7,7 +7,7 @@
     </div>
     <section class="section">
       <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body table-wrapper-scroll-y my-custom-scrollbar h-25">
                         <h5 class="card-title"></h5>
@@ -15,10 +15,12 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Alınan məhsul</th>
-                                    <th scope="col">Alan işçi</th>
-                                    <th scope="col">Əməliyyat tarixi</th>
-                                    <th scope="col">Say</th>
+                                    {% for purchase_product_field in purchase_product_fields %}
+                                        <th scope="col">{{ purchase_product_field.verbose_name }}</th>
+                                    {%endfor%}
+                                    <th scope="col">Firma və ya individual şəxs</th>
+                                    <th scope="col">Ölçü vahidi</th>
+{#                                    <th scope="col"></th>#}
                                 </tr>
                             </thead>
                             <tbody>
@@ -29,6 +31,17 @@
                                         <td>{{ purchase_product.employee }}</td>
                                         <td>{{ purchase_product.date }}</td>
                                         <td>{{ purchase_product.quantity }}</td>
+                                        <td>{{ purchase_product.product.firm }}</td>
+                                        <td>{{ purchase_product.product.measure }}</td>
+                                        <td>
+                                            <button class="btn btn-light geri_qaytar_btn" title="Geri qaytar" id="{{ purchase_product.pk }}">
+                                                <i class="fa-2x ri-refund-2-fill" style="font-size: 20px;"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                 {% empty %}
+                                    <tr>
+                                        <td colspan="8" class="text-center">Məlumat yoxdur</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -36,7 +49,7 @@
                     </div>
                 </div>
             </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Yeni əməliyyat</h5>
