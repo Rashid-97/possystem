@@ -87,10 +87,10 @@ class FirmDeleteView(ManagerRequiredMixin, DeleteView):
 class ProductView(ListView):
     template_name = 'pos/warehouse_product.html'
     context_object_name = 'products'
-    paginate_by = 10
+    paginate_by = 20
 
     def get_queryset(self):
-        queryset = Product.objects.none()
+        queryset = Product.objects.all()
         return queryset
 
 
@@ -174,6 +174,47 @@ class PurchaseProductCreateView(CreateView):
 
     def form_invalid(self, form):
         messages.error(self.request, form.errors, extra_tags='danger')
+        return super().form_invalid(form)
+
+
+class PurchaseProductDeleteView(DeleteView):
+    model = PurchaseProduct
+    success_url = reverse_lazy('pos:warehouse_firm_purchase')
+
+    def form_valid(self, form):
+        # Capturing instance data before deletion
+        self.object = self.get_object()
+        product_instance = self.object.product
+        deleted_quantity = self.object.quantity
+
+        # Attempt to subtract the quantity from the Product instance before deleting the PurchaseProduct
+        if product_instance.quantity >= deleted_quantity:
+            product_instance.quantity = F('quantity') - deleted_quantity
+            product_instance.save()
+            messages.info(self.request, f'Məhsul miqdarı {deleted_quantity} qədər azaldıldı.')
+        else:
+            # Handle cases where the deleted quantity exceeds available product quantity
+            messages.warning(self.request, 'Məhsulun miqdarı geri qaytarılma miqdarından azdır. Miqdar dəyişdirilmədi.')
+
+        # Deleting the object and creating a refund record
+        response = super().form_valid(form)  # This deletes the object
+
+        # After deletion, create a PurchaseProductRefund instance
+        PurchaseProductRefund.objects.create(
+            product=product_instance,
+            quantity=deleted_quantity,
+            employee=self.object.employee,
+            note='Automatically generated refund note'
+        )
+
+        # Adding a success message
+        messages.success(self.request, 'Məhsul silindi və geri qaytarılma qeydi yaradıldı.')
+
+        return response
+
+    def form_invalid(self, form):
+        # This method might not be necessary for DeleteView, but if you encounter form errors, handle them here.
+        messages.error(self.request, 'An error occurred during deletion.', extra_tags='danger')
         return super().form_invalid(form)
 
 

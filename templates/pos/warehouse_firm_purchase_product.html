@@ -34,7 +34,12 @@
                                         <td>{{ purchase_product.product.firm }}</td>
                                         <td>{{ purchase_product.product.measure }}</td>
                                         <td>
-                                            <button class="btn btn-light geri_qaytar_btn" title="Geri qaytar" id="{{ purchase_product.pk }}">
+                                            <button
+                                                    type="button"
+                                                    class="btn btn-light geri_qaytar_btn"
+                                                    title="Geri qaytar"
+                                                    data-bs-toggle="modal" data-bs-target="#modal"
+                                                    url="{% url 'pos:warehouse_firm_purchase_delete' purchase_product.pk %}">
                                                 <i class="fa-2x ri-refund-2-fill" style="font-size: 20px;"></i>
                                             </button>
                                         </td>
@@ -46,6 +51,7 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                        {% include 'partials/modal.html' %}
                     </div>
                 </div>
             </div>

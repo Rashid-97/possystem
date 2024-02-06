@@ -48,6 +48,7 @@
                         <td>
                             {% if product.picture %}
                                 <img src="{{ product.picture.url }}" alt="Şəkil" class="bi-0-square" width="50" height="50">
+{#                                <img src="{% url 'app:check_image_perm' product.pk %}" alt="Şəkil" class="bi-0-square" width="50" height="50">#}
                             {% endif %}
                         </td>
                         <td>

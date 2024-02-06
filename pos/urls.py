@@ -21,6 +21,8 @@ urlpatterns = [
 
     path('warehouse/firm/purchase', views.PurchaseProductView.as_view(), name='warehouse_firm_purchase'),
     path('warehouse/firm/purchase/create', views.PurchaseProductCreateView.as_view(), name='warehouse_firm_purchase_create'),
+    path('warehouse/firm/purchase/delete/<int:pk>', views.PurchaseProductDeleteView.as_view(), name='warehouse_firm_purchase_delete'),
+
     path('warehouse/firm/purchase_refund', views.PurchaseProductRefundView.as_view(), name='warehouse_firm_purchase_refund'),
 
     path('firm', views.FirmView.as_view(), name='firm'),

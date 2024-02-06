@@ -56,7 +56,8 @@ class PurchaseProduct(models.Model):
         queryset = cls.objects\
             .select_related('product__measure') \
             .select_related('product__firm') \
-            .select_related('employee')
+            .select_related('employee') \
+            .filter(product__is_deleted=False)
 
         return queryset
 
