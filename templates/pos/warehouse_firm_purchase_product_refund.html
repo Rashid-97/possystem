@@ -18,6 +18,7 @@
                                     {% for purchase_product_refund_field in purchase_product_refund_fields %}
                                         <th scope="col">{{ purchase_product_refund_field.verbose_name }}</th>
                                     {% endfor %}
+                                    <th>Ölçü vahidi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -25,11 +26,11 @@
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ purchase_product.product }}</td>
-                                        <td>{{ purchase_product.product.firm }}</td>
+                                        <td>{{ purchase_product.quantity }}</td>
                                         <td>{{ purchase_product.employee }}</td>
                                         <td>{{ purchase_product.date }}</td>
+                                        <td>{{ purchase_product.note }}</td>
                                         <td>{{ purchase_product.product.measure }}</td>
-                                        <td>{{ purchase_product.quantity }}</td>
                                     </tr>
                                 {% empty %}
                                     <tr>
