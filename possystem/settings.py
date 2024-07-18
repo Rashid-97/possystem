@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080', 'http://172.16.13.151:8080']
 
 
 # django debug toolbar internal ips
@@ -109,7 +109,7 @@ DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('SQL_DATABASE', 'possystem'),
