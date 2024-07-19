@@ -17,6 +17,10 @@ class Sale(models.Model):
     ])
     date = models.DateTimeField('Satış tarixi', auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Satış siyahısı'
+        verbose_name_plural = 'Satışların siyahısı'
+
 
 """
     Satilan mehsullarin siyahisi
@@ -26,6 +30,10 @@ class Sale(models.Model):
 class SaleProduct(models.Model):
     sale = models.ForeignKey(Sale, verbose_name='Satış əməliyyat nömrəsi', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='Satılan məhsul', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Satılan məhsul siyahısı'
+        verbose_name_plural = 'Satılan məhsulların siyahısı'
 
 
 """
@@ -37,6 +45,10 @@ class SaleProductRefund(models.Model):
     sale_product = models.ForeignKey(SaleProduct, verbose_name='Sale Product ID', on_delete=models.CASCADE)
     date = models.DateTimeField('Qaytarılma tarixi', auto_now_add=True)
     note = models.TextField('Qeyd', blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Geri qaytarılan məhsul siyahısı'
+        verbose_name_plural = 'Geri qaytarılan məhsulların siyahısı'
 
 
 """
@@ -68,6 +80,10 @@ class PurchaseProduct(models.Model):
 
         return fields
 
+    class Meta:
+        verbose_name = 'Firmalardan alənan məhsul siyahısı'
+        verbose_name_plural = 'Firmalardan alənan məhsulların siyahısı'
+
 
 """
     Firmalara qaytarilan mehsullarin siyahisi
@@ -96,3 +112,7 @@ class PurchaseProductRefund(models.Model):
         fields = [field for field in cls._meta.fields if field.name not in arr]
 
         return fields
+
+    class Meta:
+        verbose_name = 'Firmalara qaytarılan məhsul siyahısı'
+        verbose_name_plural = 'Firmalara qaytarılan məhsulların siyahısı'
